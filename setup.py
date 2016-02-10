@@ -4,6 +4,7 @@
 from distutils.core import setup, Extension
 import os
 import sys
+import platform
 
 extra_compile_args = ['-O0', '-g']
 extra_compile_args.append('-Wno-write-strings')  # fix "warning: deprecated conversion from string constant to 'char*'"
@@ -19,8 +20,12 @@ if os.name == 'nt':
     # Windows
     libraries = ['pinproc', 'ftd2xx']
 else:
-    # Linux
-    libraries = ['usb', 'ftdi1', 'pinproc']
+    if platform.system() == "Linux":
+        # Linux
+        libraries = ['usb', 'ftdi', 'pinproc']
+    else:
+        # OS X
+        libraries = ['usb', 'ftdi1', 'pinproc']
 
 module1 = Extension("pinproc",
                     include_dirs=['../libpinproc/include'],
